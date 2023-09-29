@@ -40,7 +40,6 @@ public:
     unsigned char& r(unsigned x, unsigned y);
     unsigned char& g(unsigned x, unsigned y);
     unsigned char& b(unsigned x, unsigned y);
-    std::tuple<unsigned char, unsigned char, unsigned char> Matrix::rgb(unsigned x, unsigned y);
 };
 
 #endif
