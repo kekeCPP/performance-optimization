@@ -24,11 +24,11 @@ Matrix blur(Matrix m, const int radius)
     Matrix scratch { PPM::max_dimension };
     auto dst { m };
 
+    double w[Gauss::max_radius] {};
+    Gauss::get_weights(radius, w);
+
     for (auto x { 0 }; x < dst.get_x_size(); x++) {
         for (auto y { 0 }; y < dst.get_y_size(); y++) {
-            double w[Gauss::max_radius] {};
-            Gauss::get_weights(radius, w);
-
             auto r { w[0] * dst.r(x, y) }, g { w[0] * dst.g(x, y) }, b { w[0] * dst.b(x, y) }, n { w[0] };
 
             for (auto wi { 1 }; wi <= radius; wi++) {
@@ -54,11 +54,10 @@ Matrix blur(Matrix m, const int radius)
         }
     }
 
+    //double w[Gauss::max_radius] {};
+    //Gauss::get_weights(radius, w);
     for (auto x { 0 }; x < dst.get_x_size(); x++) {
         for (auto y { 0 }; y < dst.get_y_size(); y++) {
-            double w[Gauss::max_radius] {};
-            Gauss::get_weights(radius, w);
-
             auto r { w[0] * scratch.r(x, y) }, g { w[0] * scratch.g(x, y) }, b { w[0] * scratch.b(x, y) }, n { w[0] };
 
             for (auto wi { 1 }; wi <= radius; wi++) {
