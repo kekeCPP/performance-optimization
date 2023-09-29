@@ -2,8 +2,6 @@
 Author: David Holmqvist <daae19@student.bth.se>
 */
 
-//Niklas skrev detta
-
 #include "matrix.hpp"
 #include "ppm.hpp"
 #include <fstream>
