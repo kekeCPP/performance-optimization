@@ -166,3 +166,8 @@ unsigned char& Matrix::b(unsigned x, unsigned y)
 {
     return B[y * x_size + x];
 }
+
+unsigned char& Matrix::rgb(unsigned x, unsigned y)
+{
+    return R[y * x_size + x];
+}

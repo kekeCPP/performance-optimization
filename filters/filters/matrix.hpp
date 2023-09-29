@@ -3,6 +3,7 @@ Author: David Holmqvist <daae19@student.bth.se>
 */
 
 #include <iostream>
+#include <tuple>
 
 #if !defined(MATRIX_HPP)
 #define MATRIX_HPP
@@ -39,6 +40,7 @@ public:
     unsigned char& r(unsigned x, unsigned y);
     unsigned char& g(unsigned x, unsigned y);
     unsigned char& b(unsigned x, unsigned y);
+    std::tuple<unsigned char, unsigned char, unsigned char> Matrix::rgb(unsigned x, unsigned y);
 };
 
 #endif

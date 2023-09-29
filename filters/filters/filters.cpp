@@ -27,9 +27,11 @@ Matrix blur(Matrix m, const int radius)
     double w[Gauss::max_radius] {};
     Gauss::get_weights(radius, w);
 
-    //cache value frequently used
-    auto dstXsize = dst.get_x_size();
-    auto dstYSize = dst.get_y_size();
+    //cache value frequently used, never changed
+    const auto dstXsize = dst.get_x_size();
+    const auto dstYSize = dst.get_y_size();
+
+    std::tuple<unsigned char, unsigned char, unsigned char> rgbTuple;
 
     for (auto x { 0 }; x < dstXsize; x++) {
         for (auto y { 0 }; y < dstYSize; y++) {
@@ -39,16 +41,18 @@ Matrix blur(Matrix m, const int radius)
                 auto wc { w[wi] };
                 auto x2 { x - wi };
                 if (x2 >= 0) {
-                    r += wc * dst.r(x2, y);
-                    g += wc * dst.g(x2, y);
-                    b += wc * dst.b(x2, y);
+                    rgbTuple = dst.rgb(x2, y);
+                    r += wc * std::get<0>(rgbTuple);
+                    g += wc * std::get<1>(rgbTuple);
+                    b += wc * std::get<2>(rgbTuple);
                     n += wc;
                 }
                 x2 = x + wi;
                 if (x2 < dstXsize) {
-                    r += wc * dst.r(x2, y);
-                    g += wc * dst.g(x2, y);
-                    b += wc * dst.b(x2, y);
+                    rgbTuple = dst.rgb(x2, y);
+                    r += wc * std::get<0>(rgbTuple);
+                    g += wc * std::get<1>(rgbTuple);
+                    b += wc * std::get<2>(rgbTuple);
                     n += wc;
                 }
             }
@@ -58,8 +62,6 @@ Matrix blur(Matrix m, const int radius)
         }
     }
 
-    //double w[Gauss::max_radius] {};
-    //Gauss::get_weights(radius, w);
     for (auto x { 0 }; x < dstXsize; x++) {
         for (auto y { 0 }; y < dstYSize; y++) {
             auto r { w[0] * scratch.r(x, y) }, g { w[0] * scratch.g(x, y) }, b { w[0] * scratch.b(x, y) }, n { w[0] };
@@ -68,16 +70,18 @@ Matrix blur(Matrix m, const int radius)
                 auto wc { w[wi] };
                 auto y2 { y - wi };
                 if (y2 >= 0) {
-                    r += wc * scratch.r(x, y2);
-                    g += wc * scratch.g(x, y2);
-                    b += wc * scratch.b(x, y2);
+                    rgbTuple = dst.rgb(y2, y);
+                    r += wc * std::get<0>(rgbTuple);
+                    g += wc * std::get<0>(rgbTuple);
+                    b += wc * std::get<0>(rgbTuple);
                     n += wc;
                 }
                 y2 = y + wi;
                 if (y2 < dstYSize) {
-                    r += wc * scratch.r(x, y2);
-                    g += wc * scratch.g(x, y2);
-                    b += wc * scratch.b(x, y2);
+                    rgbTuple = dst.rgb(y2, y);
+                    r += wc * std::get<0>(rgbTuple);
+                    g += wc * std::get<0>(rgbTuple);
+                    b += wc * std::get<0>(rgbTuple);
                     n += wc;
                 }
             }
