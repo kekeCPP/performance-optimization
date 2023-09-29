@@ -27,8 +27,12 @@ Matrix blur(Matrix m, const int radius)
     double w[Gauss::max_radius] {};
     Gauss::get_weights(radius, w);
 
-    for (auto x { 0 }; x < dst.get_x_size(); x++) {
-        for (auto y { 0 }; y < dst.get_y_size(); y++) {
+    //cache value frequently used
+    auto dstXsize = dst.get_x_size();
+    auto dstYSize = dst.get_y_size();
+
+    for (auto x { 0 }; x < dstXsize; x++) {
+        for (auto y { 0 }; y < dstYSize; y++) {
             auto r { w[0] * dst.r(x, y) }, g { w[0] * dst.g(x, y) }, b { w[0] * dst.b(x, y) }, n { w[0] };
 
             for (auto wi { 1 }; wi <= radius; wi++) {
@@ -41,7 +45,7 @@ Matrix blur(Matrix m, const int radius)
                     n += wc;
                 }
                 x2 = x + wi;
-                if (x2 < dst.get_x_size()) {
+                if (x2 < dstXsize) {
                     r += wc * dst.r(x2, y);
                     g += wc * dst.g(x2, y);
                     b += wc * dst.b(x2, y);
@@ -56,8 +60,8 @@ Matrix blur(Matrix m, const int radius)
 
     //double w[Gauss::max_radius] {};
     //Gauss::get_weights(radius, w);
-    for (auto x { 0 }; x < dst.get_x_size(); x++) {
-        for (auto y { 0 }; y < dst.get_y_size(); y++) {
+    for (auto x { 0 }; x < dstXsize; x++) {
+        for (auto y { 0 }; y < dstYSize; y++) {
             auto r { w[0] * scratch.r(x, y) }, g { w[0] * scratch.g(x, y) }, b { w[0] * scratch.b(x, y) }, n { w[0] };
 
             for (auto wi { 1 }; wi <= radius; wi++) {
@@ -70,7 +74,7 @@ Matrix blur(Matrix m, const int radius)
                     n += wc;
                 }
                 y2 = y + wi;
-                if (y2 < dst.get_y_size()) {
+                if (y2 < dstYSize) {
                     r += wc * scratch.r(x, y2);
                     g += wc * scratch.g(x, y2);
                     b += wc * scratch.b(x, y2);
