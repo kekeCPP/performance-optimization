@@ -10,9 +10,9 @@ Author: David Holmqvist <daae19@student.bth.se>
 namespace Filter {
 
 namespace Gauss {
-    void get_weights(int n, double* weights_out)
+    void get_weights(int &n, double* weights_out)
     {
-        for (auto i { 0 }; i <= n; i++) {
+        for (size_t i = 0 ; i <= n; ++i) {
             double x { static_cast<double>(i) * max_x / n };
             weights_out[i] = exp(-x * x * pi);
         }
