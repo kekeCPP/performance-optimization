@@ -21,6 +21,9 @@ void Reader::fill(std::string filename)
         return;
     }
 
+    char buf[128];
+    std::setbuf(stdin, buf);
+
     std::copy(
         std::istreambuf_iterator<char> { f.rdbuf() },
         std::istreambuf_iterator<char> {},
