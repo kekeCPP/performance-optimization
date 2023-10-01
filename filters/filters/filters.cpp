@@ -44,11 +44,11 @@ Matrix blur(Matrix m, const int radius)
                 auto x2 { x - wi };
                 if (x2 >= 0) {
                     //r += wc * dst.r(x2, y);
-                    r += wc * rPtr[y * dstXsize + x];
+                    r += wc * rPtr[y * dstXsize + x2];
                     //g += wc * dst.g(x2, y);
-                    g += wc * gPtr[y * dstXsize + x];
+                    g += wc * gPtr[y * dstXsize + x2];
                     //b += wc * dst.b(x2, y);
-                    b += wc * bPtr[y * dstXsize + x];
+                    b += wc * bPtr[y * dstXsize + x2];
                     n += wc;
                 }
                 x2 = x + wi;
