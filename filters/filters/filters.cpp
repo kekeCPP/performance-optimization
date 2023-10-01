@@ -32,9 +32,14 @@ Matrix blur(Matrix m, const int radius)
     const auto dstYSize = dst.get_y_size();
 
     //pointers for r,g,b in dst matrix
-    auto rPtr = dst.get_R();
-    auto gPtr = dst.get_G();
-    auto bPtr = dst.get_B();
+    auto dstR = dst.get_R();
+    auto dstG = dst.get_G();
+    auto dstB = dst.get_B();
+
+    //pointers for r,g,b scratch matrix
+    auto scrR = scratch.get_R();
+    auto scrG = scratch.get_G();
+    auto scrB = scratch.get_B();
 
     for (auto x { 0 }; x < dstXsize; x++) {
         for (auto y { 0 }; y < dstYSize; y++) {
@@ -45,18 +50,21 @@ Matrix blur(Matrix m, const int radius)
                 auto x2 { x - wi };
                 if (x2 >= 0) {
                     //r += wc * dst.r(x2, y);
-                    r += wc * rPtr[y * dstXsize + x2];
                     //g += wc * dst.g(x2, y);
-                    g += wc * gPtr[y * dstXsize + x2];
                     //b += wc * dst.b(x2, y);
-                    b += wc * bPtr[y * dstXsize + x2];
+                    r += wc * dstR[y * dstXsize + x2];
+                    g += wc * dstG[y * dstXsize + x2];
+                    b += wc * dstB[y * dstXsize + x2];
                     n += wc;
                 }
                 x2 = x + wi;
                 if (x2 < dstXsize) {
-                    r += wc * dst.r(x2, y);
-                    g += wc * dst.g(x2, y);
-                    b += wc * dst.b(x2, y);
+                    //r += wc * dst.r(x2, y);
+                    //g += wc * dst.g(x2, y);
+                    //b += wc * dst.b(x2, y);
+                    r += wc * dstR[y * dstXsize + x2];
+                    g += wc * dstG[y * dstXsize + x2];
+                    b += wc * dstB[y * dstXsize + x2];
                     n += wc;
                 }
             }
@@ -74,16 +82,22 @@ Matrix blur(Matrix m, const int radius)
                 auto wc { w[wi] };
                 auto y2 { y - wi };
                 if (y2 >= 0) {
-                    r += wc * scratch.r(x, y2);
-                    g += wc * scratch.g(x, y2);
-                    b += wc * scratch.b(x, y2);
+                    //r += wc * scratch.r(x, y2);
+                    //g += wc * scratch.g(x, y2);
+                    //b += wc * scratch.b(x, y2);
+                    r += wc * scrR[y2 * dstXsize + x];
+                    r += wc * scrG[y2 * dstXsize + x];
+                    r += wc * scrB[y2 * dstXsize + x];
                     n += wc;
                 }
                 y2 = y + wi;
                 if (y2 < dstYSize) {
-                    r += wc * scratch.r(x, y2);
-                    g += wc * scratch.g(x, y2);
-                    b += wc * scratch.b(x, y2);
+                    //r += wc * scratch.r(x, y2);
+                    //g += wc * scratch.g(x, y2);
+                    //b += wc * scratch.b(x, y2);
+                    r += wc * scrR[y2 * dstXsize + x];
+                    r += wc * scrG[y2 * dstXsize + x];
+                    r += wc * scrB[y2 * dstXsize + x];
                     n += wc;
                 }
             }
