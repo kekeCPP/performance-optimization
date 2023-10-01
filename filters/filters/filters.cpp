@@ -31,9 +31,10 @@ Matrix blur(Matrix m, const int radius)
     const auto dstXsize = dst.get_x_size();
     const auto dstYSize = dst.get_y_size();
 
-    auto* rPtr = dst.get_R();
-    auto* gPtr = dst.get_G();
-    auto* bPtr = dst.get_B();
+    //pointers for r,g,b in dst matrix
+    auto rPtr = dst.get_R();
+    auto gPtr = dst.get_G();
+    auto bPtr = dst.get_B();
 
     for (auto x { 0 }; x < dstXsize; x++) {
         for (auto y { 0 }; y < dstYSize; y++) {
