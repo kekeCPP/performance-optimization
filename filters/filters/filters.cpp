@@ -31,6 +31,10 @@ Matrix blur(Matrix m, const int radius)
     const auto dstXsize = dst.get_x_size();
     const auto dstYSize = dst.get_y_size();
 
+    auto* rPtr = dst.get_R();
+    auto* gPtr = dst.get_G();
+    auto* bPtr = dst.get_B();
+
     for (auto x { 0 }; x < dstXsize; x++) {
         for (auto y { 0 }; y < dstYSize; y++) {
             auto r { w[0] * dst.r(x, y) }, g { w[0] * dst.g(x, y) }, b { w[0] * dst.b(x, y) }, n { w[0] };
@@ -39,10 +43,12 @@ Matrix blur(Matrix m, const int radius)
                 auto wc { w[wi] };
                 auto x2 { x - wi };
                 if (x2 >= 0) {
-                    r += wc * dst.r(x2, y);
-                    //r += wc * dst[y * dstXsize + x2];
-                    g += wc * dst.g(x2, y);
-                    b += wc * dst.b(x2, y);
+                    //r += wc * dst.r(x2, y);
+                    r += wc * rPtr[y * dstXsize + x];
+                    //g += wc * dst.g(x2, y);
+                    g += wc * gPtr[y * dstXsize + x];
+                    //b += wc * dst.b(x2, y);
+                    b += wc * bPtr[y * dstXsize + x];
                     n += wc;
                 }
                 x2 = x + wi;
