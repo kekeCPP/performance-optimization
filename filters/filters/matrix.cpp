@@ -137,32 +137,32 @@ unsigned char const* Matrix::get_B() const
     return B;
 }
 
-unsigned char Matrix::r(unsigned x, unsigned y) const
+inline unsigned char Matrix::r(unsigned x, unsigned y) const
 {
     return R[y * x_size + x];
 }
 
-unsigned char Matrix::g(unsigned x, unsigned y) const
+inline unsigned char Matrix::g(unsigned x, unsigned y) const
 {
     return G[y * x_size + x];
 }
 
-unsigned char Matrix::b(unsigned x, unsigned y) const
+inline unsigned char Matrix::b(unsigned x, unsigned y) const
 {
     return B[y * x_size + x];
 }
 
-unsigned char& Matrix::r(unsigned x, unsigned y)
+inline unsigned char& Matrix::r(unsigned x, unsigned y)
 {
     return R[y * x_size + x];
 }
 
-unsigned char& Matrix::g(unsigned x, unsigned y)
+inline unsigned char& Matrix::g(unsigned x, unsigned y)
 {
     return G[y * x_size + x];
 }
 
-unsigned char& Matrix::b(unsigned x, unsigned y)
+inline unsigned char& Matrix::b(unsigned x, unsigned y)
 {
     return B[y * x_size + x];
 }

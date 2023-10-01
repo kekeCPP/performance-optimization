@@ -21,9 +21,6 @@ void Reader::fill(std::string filename)
         return;
     }
 
-    char buf[128];
-    std::setbuf(stdin, buf);
-
     std::copy(
         std::istreambuf_iterator<char> { f.rdbuf() },
         std::istreambuf_iterator<char> {},
@@ -142,7 +139,6 @@ Matrix Reader::operator()(std::string filename)
         }
 
         stream.clear();
-        std::cout << "read complete" << std::endl;
         return Matrix { R, G, B, x_size, y_size, color_max };
     } catch (std::runtime_error e) {
         error("reading", e.what());

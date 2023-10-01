@@ -40,6 +40,7 @@ Matrix blur(Matrix m, const int radius)
                 auto x2 { x - wi };
                 if (x2 >= 0) {
                     r += wc * dst.r(x2, y);
+                    //r += wc * dst[y * dstXsize + x2];
                     g += wc * dst.g(x2, y);
                     b += wc * dst.b(x2, y);
                     n += wc;
