@@ -41,6 +41,8 @@ Matrix blur(Matrix m, const int radius)
     auto scrG = scratch.get_G();
     auto scrB = scratch.get_B();
 
+    const auto scrXsize = scratch.get_x_size();
+
     for (auto x { 0 }; x < dstXsize; x++) {
         for (auto y { 0 }; y < dstYSize; y++) {
             auto r { w[0] * dst.r(x, y) }, g { w[0] * dst.g(x, y) }, b { w[0] * dst.b(x, y) }, n { w[0] };
@@ -85,9 +87,9 @@ Matrix blur(Matrix m, const int radius)
                     //r += wc * scratch.r(x, y2);
                     //g += wc * scratch.g(x, y2);
                     //b += wc * scratch.b(x, y2);
-                    r += wc * scrR[y2 * dstXsize + x];
-                    r += wc * scrG[y2 * dstXsize + x];
-                    r += wc * scrB[y2 * dstXsize + x];
+                    r += wc * scrR[y2 * scrXsize + x];
+                    g += wc * scrG[y2 * scrXsize + x];
+                    b += wc * scrB[y2 * scrXsize + x];
                     n += wc;
                 }
                 y2 = y + wi;
@@ -95,9 +97,9 @@ Matrix blur(Matrix m, const int radius)
                     //r += wc * scratch.r(x, y2);
                     //g += wc * scratch.g(x, y2);
                     //b += wc * scratch.b(x, y2);
-                    r += wc * scrR[y2 * dstXsize + x];
-                    r += wc * scrG[y2 * dstXsize + x];
-                    r += wc * scrB[y2 * dstXsize + x];
+                    r += wc * scrR[y2 * scrXsize + x];
+                    g += wc * scrG[y2 * scrXsize + x];
+                    b += wc * scrB[y2 * scrXsize + x];
                     n += wc;
                 }
             }
