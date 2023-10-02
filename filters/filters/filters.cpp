@@ -121,9 +121,6 @@ Matrix threshold(Matrix m)
     auto dstG = dst.get_G();
     auto dstB = dst.get_B();
 
-    //cache value frequently used, never changed
-    const auto dstXsize = dst.get_x_size();
-
     unsigned sum {}, nump { dst.get_x_size() * dst.get_y_size() };
 
     for (auto i { 0 }; i < nump; i++) {
@@ -140,6 +137,7 @@ Matrix threshold(Matrix m)
         psum += dstR[i] + dstG[i] + dstB[i];
         if (sum > psum) {
             dst.r(i, 0) = dst.g(i, 0) = dst.b(i, 0) = 0;
+            *(&dstR + i) = *(&dstG + i) = *(&dstB + i) = 0;
         } else {
             dst.r(i, 0) = dst.g(i, 0) = dst.b(i, 0) = 255;
         }
