@@ -113,9 +113,9 @@ Matrix blur(Matrix &m, const int radius)
             //m.g(x, y) = g / n;
             //m.b(x, y) = b / n;
 
-            dstR2[y * scrXsize + x] = r / n;
-            dstG2[y * scrXsize + x] = g / n;
-            dstB2[y * scrXsize + x] = b / n;
+            dstR2[y * dstXsize + x] = r / n;
+            dstG2[y * dstXsize + x] = g / n;
+            dstB2[y * dstXsize + x] = b / n;
         }
     }
 
