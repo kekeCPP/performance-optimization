@@ -115,10 +115,21 @@ Matrix blur(Matrix m, const int radius)
 Matrix threshold(Matrix m)
 {
     auto dst { m };
+
+    //pointers for r,g,b in dst matrix
+    auto dstR = dst.get_R();
+    auto dstG = dst.get_G();
+    auto dstB = dst.get_B();
+
+    //cache value frequently used, never changed
+    const auto dstXsize = dst.get_x_size();
+
     unsigned sum {}, nump { dst.get_x_size() * dst.get_y_size() };
 
     for (auto i { 0 }; i < nump; i++) {
-        sum += dst.r(i, 0) + dst.g(i, 0) + dst.b(i, 0);
+        //sum += dst.r(i, 0) + dst.g(i, 0) + dst.b(i, 0);
+        //sum += dstR[0 * dstXsize + i] + dstG[0 * dstXsize + i] + dstB[0 * dstXsize + i];
+        sum += dstR[i] + dstG[i] + dstB[i];
     }
 
     sum /= nump;
