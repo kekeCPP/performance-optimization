@@ -18,7 +18,7 @@ namespace Gauss {
 }
 
 Matrix blur(Matrix m, const int radius);
-Matrix threshold(Matrix m);
+Matrix threshold(Matrix &m);
 
 }
 

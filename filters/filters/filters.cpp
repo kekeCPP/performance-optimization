@@ -111,15 +111,14 @@ Matrix blur(Matrix m, const int radius)
     return dst;
 }
 
-Matrix threshold(Matrix m)
+Matrix threshold(Matrix &m)
 {
-    auto dst { m };
-    unsigned sum {}, nump { dst.get_x_size() * dst.get_y_size() };
+    unsigned sum {}, nump { m.get_x_size() * m.get_y_size() };
 
     //pointers for r,g,b in dst matrix
-    auto dstR = dst.get_R();
-    auto dstG = dst.get_G();
-    auto dstB = dst.get_B();
+    auto dstR = m.get_R();
+    auto dstG = m.get_G();
+    auto dstB = m.get_B();
 
     for (auto i { 0 }; i < nump; i++) {
         sum += dstR[i] + dstG[i] + dstB[i];
@@ -130,9 +129,9 @@ Matrix threshold(Matrix m)
     unsigned psum {};
 
     //non constant pointers so values can be changed
-    auto dstR2 = dst.get_R_nonconst();
-    auto dstG2 = dst.get_G_nonconst();
-    auto dstB2 = dst.get_B_nonconst();
+    auto dstR2 = m.get_R_nonconst();
+    auto dstG2 = m.get_G_nonconst();
+    auto dstB2 = m.get_B_nonconst();
 
     for (auto i { 0 }; i < nump; i++) {
         //psum = dst.r(i, 0) + dst.g(i, 0) + dst.b(i, 0);
@@ -146,7 +145,7 @@ Matrix threshold(Matrix m)
         }
     }
 
-    return dst;
+    return 0;
 }
 
 }
