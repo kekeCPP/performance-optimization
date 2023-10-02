@@ -135,14 +135,16 @@ Matrix threshold(Matrix m)
 
     unsigned psum {};
 
+    auto dstR2 = dst.get_R_nonconst();
+    auto dstG2 = dst.get_G_nonconst();
+    auto dstB2 = dst.get_B_nonconst();
+
     for (auto i { 0 }; i < nump; i++) {
         //psum = dst.r(i, 0) + dst.g(i, 0) + dst.b(i, 0);
         psum = dstR[i] + dstG[i] + dstB[i];
         if (sum > psum) {
             //dst.r(i, 0) = dst.g(i, 0) = dst.b(i, 0) = 0;
-            *(&dstR + i) = 0;
-            *(&dstG + i) = 0;
-            *(&dstB + i) = 0;
+            dstR2[i] = dstG2[i] = dstB2[i] = 0;
         } else {
             dst.r(i, 0) = dst.g(i, 0) = dst.b(i, 0) = 255;
         }
