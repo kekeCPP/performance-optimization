@@ -17,7 +17,7 @@ namespace Gauss {
     void get_weights(int n, double* weights_out);
 }
 
-Matrix blur(Matrix m, const int radius);
+Matrix blur(Matrix &m, const int radius);
 Matrix threshold(Matrix &m);
 
 }
