@@ -120,8 +120,11 @@ Matrix threshold(Matrix &m)
     auto dstG = m.get_G();
     auto dstB = m.get_B();
 
-    for (auto i { 0 }; i < nump; i++) {
+    for (auto i { 0 }; i < nump; i+=4) {
         sum += dstR[i] + dstG[i] + dstB[i];
+        sum += dstR[i + 1] + dstG[i + 1] + dstB[i + 1];
+        sum += dstR[i + 2] + dstG[i + 2] + dstB[i + 2];
+        sum += dstR[i + 3] + dstG[i + 3] + dstB[i + 3];
     }
 
     sum /= nump;
