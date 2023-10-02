@@ -51,9 +51,6 @@ Matrix blur(Matrix m, const int radius)
                 auto wc { w[wi] };
                 auto x2 { x - wi };
                 if (x2 >= 0) {
-                    //r += wc * dst.r(x2, y);
-                    //g += wc * dst.g(x2, y);
-                    //b += wc * dst.b(x2, y);
                     r += wc * dstR[y * dstXsize + x2];
                     g += wc * dstG[y * dstXsize + x2];
                     b += wc * dstB[y * dstXsize + x2];
@@ -61,9 +58,6 @@ Matrix blur(Matrix m, const int radius)
                 }
                 x2 = x + wi;
                 if (x2 < dstXsize) {
-                    //r += wc * dst.r(x2, y);
-                    //g += wc * dst.g(x2, y);
-                    //b += wc * dst.b(x2, y);
                     r += wc * dstR[y * dstXsize + x2];
                     g += wc * dstG[y * dstXsize + x2];
                     b += wc * dstB[y * dstXsize + x2];
@@ -112,7 +106,7 @@ Matrix blur(Matrix m, const int radius)
     return dst;
 }
 
-Matrix threshold(Matrix m)
+Matrix threshold(Matrix &m)
 {
     auto dst { m };
 
@@ -135,6 +129,7 @@ Matrix threshold(Matrix m)
 
     unsigned psum {};
 
+    //non constant pointers so values can be changed
     auto dstR2 = dst.get_R_nonconst();
     auto dstG2 = dst.get_G_nonconst();
     auto dstB2 = dst.get_B_nonconst();
