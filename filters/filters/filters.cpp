@@ -19,9 +19,10 @@ namespace Gauss {
     }
 }
 
-Matrix blur(Matrix &m, const int radius)
+Matrix blur(Matrix m, const int radius)
 {
     Matrix scratch { PPM::max_dimension };
+    auto dst { m };
 
     double w[Gauss::max_radius] {};
     Gauss::get_weights(radius, w);
@@ -54,7 +55,7 @@ Matrix blur(Matrix &m, const int radius)
 
     for (auto x { 0 }; x < dstXsize; x++) {
         for (auto y { 0 }; y < dstYSize; y++) {
-            auto r { w[0] * m.r(x, y) }, g { w[0] * m.g(x, y) }, b { w[0] * m.b(x, y) }, n { w[0] };
+            auto r { w[0] * dst.r(x, y) }, g { w[0] * dst.g(x, y) }, b { w[0] * dst.b(x, y) }, n { w[0] };
 
             for (auto wi { 1 }; wi <= radius; wi++) {
                 auto wc { w[wi] };
@@ -107,7 +108,7 @@ Matrix blur(Matrix &m, const int radius)
         }
     }
 
-    return 0;
+    return dst;
 }
 
 Matrix threshold(Matrix m)
@@ -115,20 +116,33 @@ Matrix threshold(Matrix m)
     auto dst { m };
     unsigned sum {}, nump { dst.get_x_size() * dst.get_y_size() };
 
+    //pointers for r,g,b in dst matrix
+    auto dstR = dst.get_R();
+    auto dstG = dst.get_G();
+    auto dstB = dst.get_B();
+
     for (auto i { 0 }; i < nump; i++) {
-        sum += dst.r(i, 0) + dst.g(i, 0) + dst.b(i, 0);
+        sum += dstR[i] + dstG[i] + dstB[i];
     }
 
     sum /= nump;
 
     unsigned psum {};
 
+    //non constant pointers so values can be changed
+    auto dstR2 = dst.get_R_nonconst();
+    auto dstG2 = dst.get_G_nonconst();
+    auto dstB2 = dst.get_B_nonconst();
+
     for (auto i { 0 }; i < nump; i++) {
-        psum = dst.r(i, 0) + dst.g(i, 0) + dst.b(i, 0);
+        //psum = dst.r(i, 0) + dst.g(i, 0) + dst.b(i, 0);
+        psum = dstR[i] + dstG[i] + dstB[i];
         if (sum > psum) {
-            dst.r(i, 0) = dst.g(i, 0) = dst.b(i, 0) = 0;
+            //dst.r(i, 0) = dst.g(i, 0) = dst.b(i, 0) = 0;
+            dstR2[i] = dstG2[i] = dstB2[i] = 0;
         } else {
-            dst.r(i, 0) = dst.g(i, 0) = dst.b(i, 0) = 255;
+            //dst.r(i, 0) = dst.g(i, 0) = dst.b(i, 0) = 255;
+            dstR2[i] = dstG2[i] = dstB2[i] = 255;
         }
     }
 
