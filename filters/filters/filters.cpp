@@ -137,7 +137,7 @@ Matrix threshold(Matrix m)
         psum += dstR[i] + dstG[i] + dstB[i];
         if (sum > psum) {
             dst.r(i, 0) = dst.g(i, 0) = dst.b(i, 0) = 0;
-            *(&dstR + i) = *(&dstG + i) = *(&dstB + i) = 0;
+            //*(&dstR + i) = *(&dstG + i) = *(&dstB + i) = 0;
         } else {
             dst.r(i, 0) = dst.g(i, 0) = dst.b(i, 0) = 255;
         }
