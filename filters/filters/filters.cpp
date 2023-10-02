@@ -31,6 +31,28 @@ Matrix blur(Matrix m, const int radius)
     const auto dstXsize = m.get_x_size();
     const auto dstYSize = m.get_y_size();
 
+    //pointers for r,g,b in dst matrix
+    auto dstR = m.get_R();
+    auto dstG = m.get_G();
+    auto dstB = m.get_B();
+
+    //non constant pointers so values can be changed
+    auto dstRnonCon = m.get_R_nonconst();
+    auto dstGnonCon = m.get_G_nonconst();
+    auto dstBnonCon = m.get_B_nonconst();
+
+    //pointers for r,g,b scratch matrix
+    auto scrR = scratch.get_R();
+    auto scrG = scratch.get_G();
+    auto scrB = scratch.get_B();
+
+    //non constant pointers so values can be changed
+    auto scrRnonCon = scratch.get_R_nonconst();
+    auto scrGnonCon = scratch.get_G_nonconst();
+    auto scrBnonCon = scratch.get_B_nonconst();
+
+    const auto scrXsize = scratch.get_x_size();
+
     for (auto x { 0 }; x < dstXsize; x++) {
         for (auto y { 0 }; y < dstYSize; y++) {
             auto r { w[0] * dst.r(x, y) }, g { w[0] * dst.g(x, y) }, b { w[0] * dst.b(x, y) }, n { w[0] };
@@ -39,22 +61,22 @@ Matrix blur(Matrix m, const int radius)
                 auto wc { w[wi] };
                 auto x2 { x - wi };
                 if (x2 >= 0) {
-                    r += wc * dst.r(x2, y);
-                    g += wc * dst.g(x2, y);
-                    b += wc * dst.b(x2, y);
+                    r += wc * dstR[y * dstXsize + x2];
+                    g += wc * dstG[y * dstXsize + x2];
+                    b += wc * dstB[y * dstXsize + x2];
                     n += wc;
                 }
                 x2 = x + wi;
                 if (x2 < dstXsize) {
-                    r += wc * dst.r(x2, y);
-                    g += wc * dst.g(x2, y);
-                    b += wc * dst.b(x2, y);
+                    r += wc * dstR[y * dstXsize + x2];
+                    g += wc * dstG[y * dstXsize + x2];
+                    b += wc * dstB[y * dstXsize + x2];
                     n += wc;
                 }
             }
-            scratch.r(x, y) = r / n;
-            scratch.g(x, y) = g / n;
-            scratch.b(x, y) = b / n;
+            scrRnonCon[y * scrXsize + x] = r / n;
+            scrGnonCon[y * scrXsize + x] = g / n;
+            scrBnonCon[y * scrXsize + x] = b / n;
         }
     }
 
@@ -66,22 +88,23 @@ Matrix blur(Matrix m, const int radius)
                 auto wc { w[wi] };
                 auto y2 { y - wi };
                 if (y2 >= 0) {
-                    r += wc * scratch.r(x, y2);
-                    g += wc * scratch.g(x, y2);
-                    b += wc * scratch.b(x, y2);
+                    r += wc * scrR[y2 * scrXsize + x];
+                    g += wc * scrG[y2 * scrXsize + x];
+                    b += wc * scrB[y2 * scrXsize + x];
                     n += wc;
                 }
                 y2 = y + wi;
                 if (y2 < dstYSize) {
-                    r += wc * scratch.r(x, y2);
-                    g += wc * scratch.g(x, y2);
-                    b += wc * scratch.b(x, y2);
+                    r += wc * scrR[y2 * scrXsize + x];
+                    g += wc * scrG[y2 * scrXsize + x];
+                    b += wc * scrB[y2 * scrXsize + x];
                     n += wc;
                 }
             }
-            dst.r(x, y) = r / n;
-            dst.g(x, y) = g / n;
-            dst.b(x, y) = b / n;
+
+            dstRnonCon[y * dstXsize + x] = r / n;
+            dstGnonCon[y * dstXsize + x] = g / n;
+            dstBnonCon[y * dstXsize + x] = b / n;
         }
     }
 
