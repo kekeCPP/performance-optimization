@@ -35,10 +35,20 @@ Matrix blur(Matrix &m, const int radius)
     auto dstG = m.get_G();
     auto dstB = m.get_B();
 
+    //non constant pointers so values can be changed
+    auto dstR2 = m.get_R_nonconst();
+    auto dstG2 = m.get_G_nonconst();
+    auto dstB2 = m.get_B_nonconst();
+
     //pointers for r,g,b scratch matrix
     auto scrR = scratch.get_R();
     auto scrG = scratch.get_G();
     auto scrB = scratch.get_B();
+
+    //non constant pointers so values can be changed
+    auto scrR2 = m.get_R_nonconst();
+    auto scrG2 = m.get_G_nonconst();
+    auto scrB2 = m.get_B_nonconst();
 
     const auto scrXsize = scratch.get_x_size();
 
@@ -63,9 +73,12 @@ Matrix blur(Matrix &m, const int radius)
                     n += wc;
                 }
             }
-            scratch.r(x, y) = r / n;
-            scratch.g(x, y) = g / n;
-            scratch.b(x, y) = b / n;
+            //scratch.r(x, y) = r / n;
+            //scratch.g(x, y) = g / n;
+            //scratch.b(x, y) = b / n;
+            scrR2[y * scrXsize + x] = r / n;
+            scrG2[y * scrXsize + x] = g / n;
+            scrB2[y * scrXsize + x] = b / n;
         }
     }
 
@@ -96,9 +109,13 @@ Matrix blur(Matrix &m, const int radius)
                     n += wc;
                 }
             }
-            m.r(x, y) = r / n;
-            m.g(x, y) = g / n;
-            m.b(x, y) = b / n;
+            //m.r(x, y) = r / n;
+            //m.g(x, y) = g / n;
+            //m.b(x, y) = b / n;
+
+            dstR2[y * scrXsize + x] = r / n;
+            dstG2[y * scrXsize + x] = g / n;
+            dstB2[y * scrXsize + x] = b / n;
         }
     }
 
