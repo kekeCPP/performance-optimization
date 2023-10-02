@@ -40,6 +40,10 @@ public:
     unsigned char& r(unsigned x, unsigned y);
     unsigned char& g(unsigned x, unsigned y);
     unsigned char& b(unsigned x, unsigned y);
+
+    unsigned char* Matrix::get_R_nonconst();
+    unsigned char* Matrix::get_G_nonconst();
+    unsigned char* Matrix::get_B_nonconst();
 };
 
 #endif
