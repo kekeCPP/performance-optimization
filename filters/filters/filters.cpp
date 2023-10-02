@@ -146,7 +146,8 @@ Matrix threshold(Matrix m)
             //dst.r(i, 0) = dst.g(i, 0) = dst.b(i, 0) = 0;
             dstR2[i] = dstG2[i] = dstB2[i] = 0;
         } else {
-            dst.r(i, 0) = dst.g(i, 0) = dst.b(i, 0) = 255;
+            //dst.r(i, 0) = dst.g(i, 0) = dst.b(i, 0) = 255;
+            dstR2[i] = dstG2[i] = dstB2[i] = 255;
         }
     }
 
