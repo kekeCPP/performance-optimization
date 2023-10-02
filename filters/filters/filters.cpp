@@ -19,10 +19,9 @@ namespace Gauss {
     }
 }
 
-Matrix blur(Matrix m, const int radius)
+Matrix blur(Matrix &m, const int radius)
 {
     Matrix scratch { PPM::max_dimension };
-    auto dst { m };
 
     double w[Gauss::max_radius] {};
     Gauss::get_weights(radius, w);
@@ -55,7 +54,7 @@ Matrix blur(Matrix m, const int radius)
 
     for (auto x { 0 }; x < dstXsize; x++) {
         for (auto y { 0 }; y < dstYSize; y++) {
-            auto r { w[0] * dst.r(x, y) }, g { w[0] * dst.g(x, y) }, b { w[0] * dst.b(x, y) }, n { w[0] };
+            auto r { w[0] * m.r(x, y) }, g { w[0] * m.g(x, y) }, b { w[0] * m.b(x, y) }, n { w[0] };
 
             for (auto wi { 1 }; wi <= radius; wi++) {
                 auto wc { w[wi] };
@@ -108,7 +107,7 @@ Matrix blur(Matrix m, const int radius)
         }
     }
 
-    return dst;
+    return 0;
 }
 
 Matrix threshold(Matrix m)
