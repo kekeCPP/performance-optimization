@@ -12,21 +12,21 @@ namespace PPM {
 
 void Reader::fill(std::string filename)
 {
-    FILE* f = fopen(filename.c_str(), "rb");
+    std::ifstream f {};
+
+    f.open(filename);
 
     if (!f) {
         stream.setstate(std::ios::failbit);
         return;
     }
 
-    char buffer[BUFSIZ];
-    size_t bytesRead;
+    std::copy(
+        std::istreambuf_iterator<char> { f.rdbuf() },
+        std::istreambuf_iterator<char> {},
+        std::ostreambuf_iterator<char> { stream });
 
-    while ((bytesRead = fread(buffer, 1, BUFSIZ, f)) > 0) {
-        stream.write(buffer, bytesRead);
-    }
-
-    fclose(f);
+    f.close();
 }
 
 std::string Reader::get_magic_number()
