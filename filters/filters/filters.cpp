@@ -19,22 +19,21 @@ namespace Gauss {
     }
 }
 
-Matrix blur(Matrix m, const int radius)
+Matrix blur(Matrix &m, const int radius)
 {
     Matrix scratch { PPM::max_dimension };
-    auto dst { m };
 
     double w[Gauss::max_radius] {};
     Gauss::get_weights(radius, w);
 
     //cache value frequently used, never changed
-    const auto dstXsize = dst.get_x_size();
-    const auto dstYSize = dst.get_y_size();
+    const auto dstXsize = m.get_x_size();
+    const auto dstYSize = m.get_y_size();
 
     //pointers for r,g,b in dst matrix
-    auto dstR = dst.get_R();
-    auto dstG = dst.get_G();
-    auto dstB = dst.get_B();
+    auto dstR = m.get_R();
+    auto dstG = m.get_G();
+    auto dstB = m.get_B();
 
     //pointers for r,g,b scratch matrix
     auto scrR = scratch.get_R();
@@ -45,7 +44,7 @@ Matrix blur(Matrix m, const int radius)
 
     for (auto x { 0 }; x < dstXsize; x++) {
         for (auto y { 0 }; y < dstYSize; y++) {
-            auto r { w[0] * dst.r(x, y) }, g { w[0] * dst.g(x, y) }, b { w[0] * dst.b(x, y) }, n { w[0] };
+            auto r { w[0] * m.r(x, y) }, g { w[0] * m.g(x, y) }, b { w[0] * m.b(x, y) }, n { w[0] };
 
             for (auto wi { 1 }; wi <= radius; wi++) {
                 auto wc { w[wi] };
@@ -97,13 +96,13 @@ Matrix blur(Matrix m, const int radius)
                     n += wc;
                 }
             }
-            dst.r(x, y) = r / n;
-            dst.g(x, y) = g / n;
-            dst.b(x, y) = b / n;
+            m.r(x, y) = r / n;
+            m.g(x, y) = g / n;
+            m.b(x, y) = b / n;
         }
     }
 
-    return dst;
+    return 0;
 }
 
 Matrix threshold(Matrix &m)
