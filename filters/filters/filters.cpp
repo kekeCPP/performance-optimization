@@ -128,7 +128,6 @@ Matrix threshold(Matrix m)
 
     for (auto i { 0 }; i < nump; i++) {
         //sum += dst.r(i, 0) + dst.g(i, 0) + dst.b(i, 0);
-        //sum += dstR[0 * dstXsize + i] + dstG[0 * dstXsize + i] + dstB[0 * dstXsize + i];
         sum += dstR[i] + dstG[i] + dstB[i];
     }
 
@@ -137,7 +136,8 @@ Matrix threshold(Matrix m)
     unsigned psum {};
 
     for (auto i { 0 }; i < nump; i++) {
-        psum = dst.r(i, 0) + dst.g(i, 0) + dst.b(i, 0);
+        //psum = dst.r(i, 0) + dst.g(i, 0) + dst.b(i, 0);
+        psum += dstR[i] + dstG[i] + dstB[i];
         if (sum > psum) {
             dst.r(i, 0) = dst.g(i, 0) = dst.b(i, 0) = 0;
         } else {
