@@ -19,9 +19,9 @@ int main(int argc, char const* argv[])
     PPM::Writer writer {};
 
     auto m { reader(argv[1]) };
-    Filter::threshold(m);
+    auto thresholded { Filter::threshold(m) };
 
-    writer(m, argv[2]);
+    writer(thresholded, argv[2]);
 
     return 0;
 }

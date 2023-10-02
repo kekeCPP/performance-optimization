@@ -3,7 +3,6 @@ Author: David Holmqvist <daae19@student.bth.se>
 */
 
 #include <iostream>
-#include <tuple>
 
 #if !defined(MATRIX_HPP)
 #define MATRIX_HPP
@@ -40,10 +39,6 @@ public:
     unsigned char& r(unsigned x, unsigned y);
     unsigned char& g(unsigned x, unsigned y);
     unsigned char& b(unsigned x, unsigned y);
-
-    unsigned char* get_R_nonconst();
-    unsigned char* get_G_nonconst();
-    unsigned char* get_B_nonconst();
 };
 
 #endif
