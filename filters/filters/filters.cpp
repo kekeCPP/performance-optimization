@@ -123,12 +123,16 @@ Matrix threshold(Matrix m)
 
     unsigned sum {}, nump { dst.get_x_size() * dst.get_y_size() };
 
-    for (auto i { 0 }; i < nump; i+=4) {
+    for (auto i { 0 }; i < nump; i+=8) {
         //sum += dst.r(i, 0) + dst.g(i, 0) + dst.b(i, 0);
         sum += dstR[i] + dstG[i] + dstB[i];
         sum += dstR[i + 1] + dstG[i + 1] + dstB[i + 1];
         sum += dstR[i + 2] + dstG[i + 2] + dstB[i + 2];
         sum += dstR[i + 3] + dstG[i + 3] + dstB[i + 3];
+        sum += dstR[i + 4] + dstG[i + 4] + dstB[i + 4];
+        sum += dstR[i + 5] + dstG[i + 5] + dstB[i + 5];
+        sum += dstR[i + 6] + dstG[i + 6] + dstB[i + 6];
+        sum += dstR[i + 7] + dstG[i + 7] + dstB[i + 7];
     }
 
     sum /= nump;
