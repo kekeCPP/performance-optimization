@@ -21,10 +21,21 @@ void Reader::fill(std::string filename)
         return;
     }
 
-    std::copy(
-        std::istreambuf_iterator<char> { f.rdbuf() },
-        std::istreambuf_iterator<char> {},
-        std::ostreambuf_iterator<char> { stream });
+    stream << f.rdbuf();
+
+    f.seekg(0, std::istream::end);
+    std::streamoff len = f.tellg(); // get length of file
+    f.seekg(0);
+
+
+    std::string line;
+    res.clear();
+    if (len > 0) {
+        res.reserve(static_cast<std::string::size_type>(len));
+    }
+    while (getline(f, line)) {
+        (res += line) += "\n";
+    }
 
     f.close();
 }
@@ -80,15 +91,17 @@ std::tuple<unsigned char*, unsigned char*, unsigned char*> Reader::get_data(unsi
     auto size { x_size * y_size };
     auto R { new char[size] }, G { new char[size] }, B { new char[size] };
 
-    for (auto i { 0 }, read { 0 }; i < size; i++, read = 0) {
-        stream.read(R + i, 1);
-        read += stream.gcount();
-        stream.read(G + i, 1);
-        read += stream.gcount();
-        stream.read(B + i, 1);
-        read += stream.gcount();
+    unsigned int j = stream.tellg(); // variable to keep reading the next element, starts at current position in stream
 
-        if (read != 3) {
+    for (auto i { 0 }, read { 0 }; i < size; i++) {
+
+        R[i] = res[j];
+        G[i] = res[j + 1];
+        B[i] = res[j + 2];
+        j+=3;
+        
+
+        if (&R[i] == nullptr || &G[i] == nullptr || &B[i] == nullptr) {
             delete[] R;
             delete[] G;
             delete[] B;

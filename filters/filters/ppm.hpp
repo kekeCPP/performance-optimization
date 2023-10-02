@@ -21,6 +21,7 @@ constexpr char const* magic_number { "P6" };
 class Reader {
 private:
     std::stringstream stream;
+    std::string res;
 
     std::string get_magic_number();
     std::pair<unsigned, unsigned> get_dimensions();
