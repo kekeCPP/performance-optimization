@@ -46,9 +46,9 @@ Matrix blur(Matrix &m, const int radius)
     auto scrB = scratch.get_B();
 
     //non constant pointers so values can be changed
-    auto scrR2 = m.get_R_nonconst();
-    auto scrG2 = m.get_G_nonconst();
-    auto scrB2 = m.get_B_nonconst();
+    auto scrR2 = scratch.get_R_nonconst();
+    auto scrG2 = scratch.get_G_nonconst();
+    auto scrB2 = scratch.get_B_nonconst();
 
     const auto scrXsize = scratch.get_x_size();
 
