@@ -19,8 +19,10 @@ namespace Gauss {
     }
 }
 
-Matrix blur(Matrix &dst, const int radius)
+Matrix blur(Matrix &dst, const int radius, const int MAX_THREADS)
 {
+    std::cout << "created: " << MAX_THREADS << " threads\n";
+
     Matrix scratch { PPM::max_dimension };
 
     double w[Gauss::max_radius] {};
@@ -110,8 +112,10 @@ Matrix blur(Matrix &dst, const int radius)
     return dst;
 }
 
-Matrix threshold(Matrix &m)
+Matrix threshold(Matrix &m, const int MAX_THREADS)
 {
+    std::cout << "created: " << MAX_THREADS << " threads\n";
+
     unsigned sum {}, nump { m.get_x_size() * m.get_y_size() };
 
     //pointers for r,g,b in dst matrix
