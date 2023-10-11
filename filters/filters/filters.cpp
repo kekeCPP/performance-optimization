@@ -244,8 +244,23 @@ Matrix blur_par(Matrix &dst, const int radius, const int MAX_THREADS)
     return dst;
 }
 
+void *threadFunc(void * arg){
+    std::cout << "Thread is working\n";
+    pthread_exut(NULL);
+}
+
 Matrix threshold_par(Matrix &m, const int MAX_THREADS)
 {
+    pthread_t p_threads[MAX_THREADS];
+    for(auto i { 0 }; i < MAX_THREADS; i++){
+        pthread_create(
+            &p_threads[i],
+            NULL,
+            threadFunc,
+            (void*) i
+        );
+    }
+
     std::cout << "created: " << MAX_THREADS << " threads\n";
 
     unsigned sum {}, nump { m.get_x_size() * m.get_y_size() };
