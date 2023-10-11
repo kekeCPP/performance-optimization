@@ -262,7 +262,6 @@ Matrix threshold_par(Matrix &m, const int MAX_THREADS)
             threadFunc,
             (void*) &i
         );
-        thread_sum = thread_sum * 2;
     }
 
     for (auto i { 0 } ; i < MAX_THREADS; i++) {
