@@ -251,7 +251,7 @@ struct thread_data{
         const unsigned char* dstR;
         const unsigned char* dstG;
         const unsigned char* dstB;
-        int* sum;
+        auto* sum;
 };
 
 void *threadFunc(void * thread_arg){
