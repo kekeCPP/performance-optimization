@@ -259,7 +259,7 @@ void *threadFunc(void * thread_arg){
     my_data = (struct thread_data *) thread_arg;
 
     for (auto i { my_data->thread_id }; i < my_data->nump; i += my_data->thread_number) {
-        my_data->sum +=  my_data->dstR[i] + my_data->dstG[i] + my_data->dstG[i];
+        *my_data->sum +=  my_data->dstR[i] + my_data->dstG[i] + my_data->dstG[i];
     }
 
     pthread_exit(NULL);
@@ -302,7 +302,7 @@ Matrix threshold_par(Matrix &m, const int MAX_THREADS)
     for (auto i { 0 } ; i < MAX_THREADS; i++) {
         pthread_join(p_threads[i], NULL); // Wait for all threads to terminate
     }
-    std::cout << sum;
+    std::cout << sum << std::endl;
     sum /= nump;
 
     unsigned psum {};
