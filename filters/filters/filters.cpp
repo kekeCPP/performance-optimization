@@ -244,35 +244,43 @@ Matrix blur_par(Matrix &dst, const int radius, const int MAX_THREADS)
     return dst;
 }
 
+struct thread_data{
+        int thread_id;
+        int sum;
+};
 
 void *threadFunc(void * thread_arg){
-    int which = * (int *)thread_arg;
-    std::cout << which << "\n";
-    which = *which + 1;
+    struct thread_data *my_data;
+    my_data = (struct thread_data *) thread_arg;
+
+    std::cout << "Thread" << my_data->thread_id << "is working\n";
+    std::cout << "Sum is:" << my_data->sum << "is working\n";
 
     pthread_exit(NULL);
 }
 
 Matrix threshold_par(Matrix &m, const int MAX_THREADS)
 {
+    struct thread_data thread_data_array[MAX_THREADS];
     pthread_t p_threads[MAX_THREADS];
-    int args[MAX_THREADS];
-    int coolVar = 0;
-    auto arg = &coolVar;
+    int thread_sum = 0;
     for(auto i { 0 }; i < MAX_THREADS; i++){
-        args[i] = i;
+        thread_data_array[i].thread_id = i;
+        thread_data_array[i].sum = thread_sum;
+
         pthread_create(
             &p_threads[i],
             NULL,
             threadFunc,
-            (void*) &arg
+            (void*) &thread_data_array[i]
         );
+        thread_sum++;
     }
+
     for (auto i { 0 } ; i < MAX_THREADS; i++) {
         pthread_join(p_threads[i], NULL); // Wait for all threads to terminate
     }
 
-    std::cout << "coolvar = " << coolVar << std::endl;
 
     unsigned sum {}, nump { m.get_x_size() * m.get_y_size() };
 
