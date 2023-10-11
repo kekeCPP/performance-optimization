@@ -261,9 +261,9 @@ void *threadFunc(void * thread_arg){
     int thread_id = my_data->thread_id;
     int num_elements = my_data->num_elements;
     int nump = my_data->nump;
-    int* dstR = my_data->dstR;
-    int* dstG = my_data->dstG;
-    int* dstB = my_data->dstB;
+    const unsigned char* dstR = my_data->dstR;
+    const unsigned char* dstG = my_data->dstG;
+    const unsigned char* dstB = my_data->dstB;
     int* partial_sums = my_data->sum;
 
     std::cout << my_data->thread_id << " " << my_data->thread_number << "\n";
