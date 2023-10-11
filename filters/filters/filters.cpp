@@ -246,8 +246,8 @@ Matrix blur_par(Matrix &dst, const int radius, const int MAX_THREADS)
 
 
 void *threadFunc(void * thread_arg){
-
-    std::cout << "Thread" << *thread_arg << "is working\n";
+    int which = * (int *)thread_arg
+    std::cout << "Thread" << which << "is working\n";
 
     pthread_exit(NULL);
 }
