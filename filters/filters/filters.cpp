@@ -258,10 +258,18 @@ void *threadFunc(void * thread_arg){
     struct thread_data *my_data;
     my_data = (struct thread_data *) thread_arg;
 
+    int thread_id = my_data->thread_id;
+    int num_elements = my_data->num_elements;
+    int nump = my_data->nump;
+    int* dstR = my_data->dstR;
+    int* dstG = my_data->dstG;
+    int* dstB = my_data->dstB;
+    int* partial_sums = my_data->sum;
+
     std::cout << my_data->thread_id << " " << my_data->thread_number << "\n";
 
-    for (auto i { my_data->thread_id }; i < my_data->nump; i += my_data->thread_number) {
-        my_data->sum[my_data->thread_id] +=  my_data->dstR[i] + my_data->dstG[i] + my_data->dstG[i];
+    for (auto i { thread_id }; i < my_data->nump; i += my_data->thread_number) {
+        partial_sums[thread_id] += dstR[i] + dstG[i] + dstB[i];
     }
     std::cout << *my_data->sum << "\n";
 
