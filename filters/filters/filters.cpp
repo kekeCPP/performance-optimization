@@ -264,10 +264,10 @@ Matrix threshold_par(Matrix &m, const int MAX_THREADS)
     struct thread_data thread_data_array[MAX_THREADS];
     int i = 0;
     pthread_t p_threads[MAX_THREADS];
-    int sum = 0;
+    int thread_sum = 0;
     for(auto i { 0 }; i < MAX_THREADS; i++){
         thread_data_array[i].thread_id = i;
-        thread_data_array[i].sum = sum;
+        thread_data_array[i].sum = thread_sum;
 
         pthread_create(
             &p_threads[i],
@@ -275,7 +275,7 @@ Matrix threshold_par(Matrix &m, const int MAX_THREADS)
             threadFunc,
             (void*) &thread_data_array[i]
         );
-        sum++;
+        thread_sum++;
     }
 
     for (auto i { 0 } ; i < MAX_THREADS; i++) {
