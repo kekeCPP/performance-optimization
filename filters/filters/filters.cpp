@@ -19,7 +19,7 @@ namespace Gauss {
     }
 }
 
-Matrix blur(Matrix &m, const int radius, const int MAX_THREADS)
+void blur(Matrix &m, const int radius, const int MAX_THREADS)
 {
     std::cout << "Created " << MAX_THREADS << " threads\n";
 
@@ -109,7 +109,7 @@ Matrix blur(Matrix &m, const int radius, const int MAX_THREADS)
         }
     }
 
-    return dst;
+    return 0;
 }
 
 Matrix threshold(Matrix &m, const int MAX_THREADS)
