@@ -21,7 +21,6 @@ int main(int argc, char const* argv[])
     auto m { reader(argv[2]) };
     auto radius { static_cast<unsigned>(std::stoul(argv[1])) };
 
-    auto blurred { Filter::blur(m, radius, std::stoul(argv[4])) };
     Filter::blur(m, radius, std::stoul(argv[4]));
     writer(blurred, argv[3]);
 
