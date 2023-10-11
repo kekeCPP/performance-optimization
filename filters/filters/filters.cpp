@@ -259,9 +259,9 @@ void *threadFunc(void * thread_arg){
     my_data = (struct thread_data *) thread_arg;
 
     for (auto i { my_data->thread_id }; i < my_data->nump; i += my_data->thread_number) {
-        std::cout << my_data->dstR[i] << " | ";
         *my_data->sum +=  my_data->dstR[i] + my_data->dstG[i] + my_data->dstG[i];
     }
+    std::cout << *my_data->sum << "\n";
 
     pthread_exit(NULL);
 }
@@ -279,7 +279,7 @@ Matrix threshold_par(Matrix &m, const int MAX_THREADS)
     pthread_t p_threads[MAX_THREADS];
     int thread_sum = 0;
 
-    /*for(auto i { 0 }; i < MAX_THREADS; i++){
+    for(auto i { 0 }; i < MAX_THREADS; i++){
         thread_data_array[i].thread_id = i;
         thread_data_array[i].thread_number = MAX_THREADS;
         thread_data_array[i].nump = nump;
@@ -293,17 +293,17 @@ Matrix threshold_par(Matrix &m, const int MAX_THREADS)
             threadFunc,
             (void*) &thread_data_array[i]
         );
-    }*/
-
-
-    for (auto i { 0 }; i < nump; i++) {
-        std::cout << dstR[i] << " | ";
-        sum += dstR[i] + dstG[i] + dstB[i];
     }
 
-    //for (auto i { 0 } ; i < MAX_THREADS; i++) {
-    //    pthread_join(p_threads[i], NULL); // Wait for all threads to terminate
-    //}
+
+    /*for (auto i { 0 }; i < nump; i++) {
+        std::cout << dstR[i] << " | ";
+        sum += dstR[i] + dstG[i] + dstB[i];
+    }*/
+
+    for (auto i { 0 } ; i < MAX_THREADS; i++) {
+        pthread_join(p_threads[i], NULL); // Wait for all threads to terminate
+    }
     std::cout << sum << std::endl;
     sum /= nump;
 
