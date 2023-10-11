@@ -246,42 +246,27 @@ Matrix blur_par(Matrix &dst, const int radius, const int MAX_THREADS)
 
 struct thread_data{
         int thread_id;
-        int sum;
+        int thread_number;
+        int nump;
+        int* dstR;
+        int* dstG;
+        int* dstB;
+        int* sum;
 };
 
 void *threadFunc(void * thread_arg){
     struct thread_data *my_data;
     my_data = (struct thread_data *) thread_arg;
 
-    std::cout << "Thread" << my_data->thread_id << "is working\n";
-    std::cout << "Sum is:" << my_data->sum << "is working\n";
+    for (auto i { my_data->thread_id }; i < my_data->nump; i += my_data->thread_number) {
+        my_data->sum +=  my_data->dstR[i] + my_data->dstG[i] + my_data->dstG[i];
+    }
 
     pthread_exit(NULL);
 }
 
 Matrix threshold_par(Matrix &m, const int MAX_THREADS)
 {
-    struct thread_data thread_data_array[MAX_THREADS];
-    pthread_t p_threads[MAX_THREADS];
-    int thread_sum = 0;
-    for(auto i { 0 }; i < MAX_THREADS; i++){
-        thread_data_array[i].thread_id = i;
-        thread_data_array[i].sum = thread_sum;
-
-        pthread_create(
-            &p_threads[i],
-            NULL,
-            threadFunc,
-            (void*) &thread_data_array[i]
-        );
-        thread_sum++;
-    }
-
-    for (auto i { 0 } ; i < MAX_THREADS; i++) {
-        pthread_join(p_threads[i], NULL); // Wait for all threads to terminate
-    }
-
-
     unsigned sum {}, nump { m.get_x_size() * m.get_y_size() };
 
     //pointers for r,g,b in dst matrix
@@ -289,13 +274,34 @@ Matrix threshold_par(Matrix &m, const int MAX_THREADS)
     auto dstG = m.get_G();
     auto dstB = m.get_B();
 
-    for (auto i { 0 }; i < nump; i+=4) {
-        sum += dstR[i] + dstG[i] + dstB[i];
-        sum += dstR[i + 1] + dstG[i + 1] + dstB[i + 1];
-        sum += dstR[i + 2] + dstG[i + 2] + dstB[i + 2];
-        sum += dstR[i + 3] + dstG[i + 3] + dstB[i + 3];
+    struct thread_data thread_data_array[MAX_THREADS];
+    pthread_t p_threads[MAX_THREADS];
+    int thread_sum = 0;
+
+    for(auto i { 0 }; i < MAX_THREADS; i++){
+        thread_data_array[i].thread_id = i;
+        thread_data_array[i].thread_number = MAX_THREADS;
+        thread_data_array[i].nump = nump;
+        thread_data_array[i].dstR = dstR;
+        thread_data_array[i].dstG = dstG;
+        thread_data_array[i].sum = &thread_sum;
+
+        pthread_create(
+            &p_threads[i],
+            NULL,
+            threadFunc,
+            (void*) &thread_data_array[i]
+        );
     }
 
+
+    //for (auto i { 0 }; i < nump; i++) {
+    //    sum += dstR[i] + dstG[i] + dstB[i];
+    //}
+
+    for (auto i { 0 } ; i < MAX_THREADS; i++) {
+        pthread_join(p_threads[i], NULL); // Wait for all threads to terminate
+    }
     sum /= nump;
 
     unsigned psum {};
