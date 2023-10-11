@@ -19,27 +19,26 @@ namespace Gauss {
     }
 }
 
-Matrix blur(Matrix m, const int radius)
+Matrix blur(Matrix &dst, const int radius)
 {
     Matrix scratch { PPM::max_dimension };
-    auto dst { m };
 
     double w[Gauss::max_radius] {};
     Gauss::get_weights(radius, w);
 
     //cache value frequently used, never changed
-    const auto dstXsize = m.get_x_size();
-    const auto dstYSize = m.get_y_size();
+    const auto dstXsize = dst.get_x_size();
+    const auto dstYSize = dst.get_y_size();
 
     //pointers for r,g,b in dst matrix
-    auto dstR = m.get_R();
-    auto dstG = m.get_G();
-    auto dstB = m.get_B();
+    auto dstR = dst.get_R();
+    auto dstG = dst.get_G();
+    auto dstB = dst.get_B();
 
     //non constant pointers so values can be changed
-    auto dstRnonCon = m.get_R_nonconst();
-    auto dstGnonCon = m.get_G_nonconst();
-    auto dstBnonCon = m.get_B_nonconst();
+    auto dstRnonCon = dst.get_R_nonconst();
+    auto dstGnonCon = dst.get_G_nonconst();
+    auto dstBnonCon = dst.get_B_nonconst();
 
     //pointers for r,g,b scratch matrix
     auto scrR = scratch.get_R();
