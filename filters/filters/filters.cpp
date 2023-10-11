@@ -295,11 +295,10 @@ Matrix threshold_par(Matrix &m, const int MAX_THREADS)
         );
     }
 
-
-    /*for (auto i { 0 }; i < nump; i++) {
-        std::cout << dstR[i] << " | ";
-        sum += dstR[i] + dstG[i] + dstB[i];
-    }*/
+    int sumReal = 0;
+    for (auto i { 0 }; i < nump; i++) {
+        sumReal += dstR[i] + dstG[i] + dstB[i];
+    }
 
     for (auto i { 0 } ; i < MAX_THREADS; i++) {
         pthread_join(p_threads[i], NULL); // Wait for all threads to terminate
@@ -309,6 +308,7 @@ Matrix threshold_par(Matrix &m, const int MAX_THREADS)
         sum+= thread_sum[i];
     }
     std::cout << "\n\nsum: "<< sum << "\n\n";
+    std::cout << "\n\nReal sum: "<< sumReal << "\n\n";
     sum /= nump;
 
     unsigned psum {};
