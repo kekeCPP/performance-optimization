@@ -3,6 +3,7 @@ Author: David Holmqvist <daae19@student.bth.se>
 */
 
 #include "matrix.hpp"
+#include <pthread.h> // pthread types and functions
 
 #if !defined(FILTERS_HPP)
 #define FILTERS_HPP
