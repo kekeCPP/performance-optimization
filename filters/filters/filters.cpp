@@ -269,8 +269,6 @@ Matrix threshold_par(Matrix &m, const int MAX_THREADS)
         pthread_join(p_threads[i], NULL); // Wait for all threads to terminate
     }
 
-    std::cout << "thread_sum is now: " << thread_sum << "\n";
-
     unsigned sum {}, nump { m.get_x_size() * m.get_y_size() };
 
     //pointers for r,g,b in dst matrix
