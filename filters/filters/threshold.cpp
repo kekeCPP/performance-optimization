@@ -11,7 +11,7 @@ Author: David Holmqvist <daae19@student.bth.se>
 int main(int argc, char const* argv[])
 {
     if (argc != 3) {
-        std::cerr << "Usage: " << argv[0] << " [infile] [outfile] [num_threads]" << std::endl;
+        std::cerr << "Usage: " << argv[0] << " [infile] [outfile]" << std::endl;
         std::exit(1);
     }
 
@@ -19,7 +19,7 @@ int main(int argc, char const* argv[])
     PPM::Writer writer {};
 
     auto m { reader(argv[1]) };
-    Filter::threshold(m, 15);
+    Filter::threshold(m);
 
     writer(m, argv[2]);
 

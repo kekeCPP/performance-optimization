@@ -19,11 +19,10 @@ namespace Gauss {
     }
 }
 
-void blur(Matrix &m, const int radius, const int MAX_THREADS)
+Matrix blur(Matrix m, const int radius)
 {
-    std::cout << "Created " << MAX_THREADS << " threads\n";
-
     Matrix scratch { PPM::max_dimension };
+    auto dst { m };
 
     double w[Gauss::max_radius] {};
     Gauss::get_weights(radius, w);
@@ -56,7 +55,7 @@ void blur(Matrix &m, const int radius, const int MAX_THREADS)
 
     for (auto x { 0 }; x < dstXsize; x++) {
         for (auto y { 0 }; y < dstYSize; y++) {
-            auto r { w[0] * m.r(x, y) }, g { w[0] * m.g(x, y) }, b { w[0] * m.b(x, y) }, n { w[0] };
+            auto r { w[0] * dst.r(x, y) }, g { w[0] * dst.g(x, y) }, b { w[0] * dst.b(x, y) }, n { w[0] };
 
             for (auto wi { 1 }; wi <= radius; wi++) {
                 auto wc { w[wi] };
@@ -108,11 +107,12 @@ void blur(Matrix &m, const int radius, const int MAX_THREADS)
             dstBnonCon[y * dstXsize + x] = b / n;
         }
     }
+
+    return dst;
 }
 
-void threshold(Matrix &m, const int MAX_THREADS)
+Matrix threshold(Matrix &m)
 {
-    std::cout << "Created " << MAX_THREADS << " threads\n";
     unsigned sum {}, nump { m.get_x_size() * m.get_y_size() };
 
     //pointers for r,g,b in dst matrix
@@ -147,6 +147,8 @@ void threshold(Matrix &m, const int MAX_THREADS)
             dstR2[i] = dstG2[i] = dstB2[i] = 255;
         }
     }
+
+    return 0;
 }
 
 }

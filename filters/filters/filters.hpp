@@ -3,7 +3,6 @@ Author: David Holmqvist <daae19@student.bth.se>
 */
 
 #include "matrix.hpp"
-#include <pthread.h> // pthread types and functions
 
 #if !defined(FILTERS_HPP)
 #define FILTERS_HPP
@@ -18,8 +17,8 @@ namespace Gauss {
     void get_weights(int n, double* weights_out);
 }
 
-void blur(Matrix &m, const int radius, const int MAX_THREADS);
-void threshold(Matrix &m, const int MAX_THREADS);
+Matrix blur(Matrix m, const int radius);
+Matrix threshold(Matrix &m);
 
 }
 
