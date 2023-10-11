@@ -303,6 +303,7 @@ Matrix threshold_par(Matrix &m, const int MAX_THREADS)
     for (auto i { 0 } ; i < MAX_THREADS; i++) {
         pthread_join(p_threads[i], NULL); // Wait for all threads to terminate
     }
+    std::cout << "\n\n";
     for(auto i = 0; i < MAX_THREADS; i++){
         std::cout << thread_sum[i] << " ";
         sum+= thread_sum[i];
