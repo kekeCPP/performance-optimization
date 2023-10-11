@@ -19,7 +19,7 @@ int main(int argc, char const* argv[])
     PPM::Writer writer {};
 
     auto m { reader(argv[1]) };
-    Filter::threshold(m, std::stoul(15));
+    Filter::threshold(m, 15);
 
     writer(m, argv[2]);
 
