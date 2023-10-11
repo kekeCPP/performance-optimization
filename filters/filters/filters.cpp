@@ -108,8 +108,6 @@ void blur(Matrix &m, const int radius, const int MAX_THREADS)
             dstBnonCon[y * dstXsize + x] = b / n;
         }
     }
-
-    return 0;
 }
 
 void threshold(Matrix &m, const int MAX_THREADS)
@@ -149,8 +147,6 @@ void threshold(Matrix &m, const int MAX_THREADS)
             dstR2[i] = dstG2[i] = dstB2[i] = 255;
         }
     }
-
-    return 0;
 }
 
 }
