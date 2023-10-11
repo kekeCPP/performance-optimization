@@ -259,7 +259,6 @@ void *threadFunc(void * thread_arg){
     my_data = (struct thread_data *) thread_arg;
 
     int thread_id = my_data->thread_id;
-    int num_elements = my_data->num_elements;
     int nump = my_data->nump;
     const unsigned char* dstR = my_data->dstR;
     const unsigned char* dstG = my_data->dstG;
