@@ -245,7 +245,7 @@ Matrix blur_par(Matrix &dst, const int radius, const int MAX_THREADS)
 }
 
 void *threadFunc(void * arg){
-    std::cout << "Thread" << arg << "is working\n";
+    std::cout << "Thread" << &arg << "is working\n";
     pthread_exit(NULL);
 }
 
@@ -259,6 +259,10 @@ Matrix threshold_par(Matrix &m, const int MAX_THREADS)
             threadFunc,
             (void*) i
         );
+    }
+
+    for (auto i { 0 } ; i < MAX_THREADS; i++) {
+        pthread_join(p_threads[i], NULL); // Wait for all threads to terminate
     }
 
     std::cout << "created: " << MAX_THREADS << " threads\n";
