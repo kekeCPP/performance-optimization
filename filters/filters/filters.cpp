@@ -254,7 +254,7 @@ void *threadFunc(void * thread_arg){
     my_data = (struct thread_data *) thread_arg;
 
     std::cout << "Thread" << my_data->thread_id << "is working\n";
-    std::cout << "Sum is:" << my_data->sum << "is working\n";
+    std::cout << "Sum is:" << my_data->sum << "is working\n\n";
 
     pthread_exit(NULL);
 }
@@ -275,14 +275,14 @@ Matrix threshold_par(Matrix &m, const int MAX_THREADS)
             threadFunc,
             (void*) &thread_data_array[i]
         );
-        thread_sum++;
+        thread_sum = thread_sum * 2;
     }
 
     for (auto i { 0 } ; i < MAX_THREADS; i++) {
         pthread_join(p_threads[i], NULL); // Wait for all threads to terminate
     }
 
-    std::cout << "I is now: " << i << ", should be: " << MAX_THREADS << "\n";
+    std::cout << "thread_sum is now: " << thread_sum << ", should be: " << MAX_THREADS << "\n";
 
     unsigned sum {}, nump { m.get_x_size() * m.get_y_size() };
 
