@@ -248,9 +248,9 @@ struct thread_data{
         int thread_id;
         int thread_number;
         int nump;
-        int* dstR;
-        int* dstG;
-        int* dstB;
+        const unsigned char* dstR;
+        const unsigned char* dstG;
+        const unsigned char* dstB;
         int* sum;
 };
 
