@@ -257,9 +257,10 @@ struct thread_data{
 void *threadFunc(void * thread_arg){
     struct thread_data *my_data;
     my_data = (struct thread_data *) thread_arg;
+    int* partial_sums = thread_data->sum;
     int sum = 0;
     for (auto i { my_data->thread_id }; i < my_data->nump; i += my_data->thread_number) {
-        *my_data->sum +=  my_data->dstR[i] + my_data->dstG[i] + my_data->dstG[i];
+        partial_sums[my_data->thread_id] +=  my_data->dstR[i] + my_data->dstG[i] + my_data->dstG[i];
         sum += my_data->dstR[i] + my_data->dstG[i] + my_data->dstG[i];
     }
     //std::cout << *my_data->sum << " ";
