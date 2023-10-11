@@ -279,7 +279,7 @@ Matrix threshold_par(Matrix &m, const int MAX_THREADS)
     pthread_t p_threads[MAX_THREADS];
     int thread_sum = 0;
 
-    for(auto i { 0 }; i < MAX_THREADS; i++){
+    /*for(auto i { 0 }; i < MAX_THREADS; i++){
         thread_data_array[i].thread_id = i;
         thread_data_array[i].thread_number = MAX_THREADS;
         thread_data_array[i].nump = nump;
@@ -293,12 +293,13 @@ Matrix threshold_par(Matrix &m, const int MAX_THREADS)
             threadFunc,
             (void*) &thread_data_array[i]
         );
+    }*/
+
+
+    for (auto i { 0 }; i < nump; i++) {
+        std::cout << dstR[i] << " | ";
+        sum += dstR[i] + dstG[i] + dstB[i];
     }
-
-
-    //for (auto i { 0 }; i < nump; i++) {
-    //    sum += dstR[i] + dstG[i] + dstB[i];
-    //}
 
     for (auto i { 0 } ; i < MAX_THREADS; i++) {
         pthread_join(p_threads[i], NULL); // Wait for all threads to terminate
