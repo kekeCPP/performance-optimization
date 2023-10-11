@@ -19,8 +19,9 @@ namespace Gauss {
     }
 }
 
-Matrix blur(Matrix m, const int radius)
+Matrix blur(Matrix m, const int radius, const int MAX_THREADS)
 {
+    std::cout << "Created " + MAX_THREADS + " threads\n";
     Matrix scratch { PPM::max_dimension };
     auto dst { m };
 
