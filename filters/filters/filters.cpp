@@ -112,7 +112,7 @@ void blur(Matrix &m, const int radius, const int MAX_THREADS)
     return 0;
 }
 
-Matrix threshold(Matrix &m, const int MAX_THREADS)
+void threshold(Matrix &m, const int MAX_THREADS)
 {
     std::cout << "Created " << MAX_THREADS << " threads\n";
     unsigned sum {}, nump { m.get_x_size() * m.get_y_size() };
