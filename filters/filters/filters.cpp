@@ -301,9 +301,9 @@ Matrix threshold_par(Matrix &m, const int MAX_THREADS)
         sum += dstR[i] + dstG[i] + dstB[i];
     }
 
-    for (auto i { 0 } ; i < MAX_THREADS; i++) {
-        pthread_join(p_threads[i], NULL); // Wait for all threads to terminate
-    }
+    //for (auto i { 0 } ; i < MAX_THREADS; i++) {
+    //    pthread_join(p_threads[i], NULL); // Wait for all threads to terminate
+    //}
     std::cout << sum << std::endl;
     sum /= nump;
 
