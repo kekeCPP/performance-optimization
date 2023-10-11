@@ -277,7 +277,7 @@ Matrix threshold_par(Matrix &m, const int MAX_THREADS)
 
     struct thread_data thread_data_array[MAX_THREADS];
     pthread_t p_threads[MAX_THREADS];
-    int thread_sum = 0;
+    int thread_sum[MAX_THREADS];
 
     for(auto i { 0 }; i < MAX_THREADS; i++){
         thread_data_array[i].thread_id = i;
@@ -285,7 +285,7 @@ Matrix threshold_par(Matrix &m, const int MAX_THREADS)
         thread_data_array[i].nump = nump;
         thread_data_array[i].dstR = dstR;
         thread_data_array[i].dstG = dstG;
-        thread_data_array[i].sum = &thread_sum;
+        thread_data_array[i].sum = &thread_sum[i];
 
         pthread_create(
             &p_threads[i],
@@ -304,8 +304,9 @@ Matrix threshold_par(Matrix &m, const int MAX_THREADS)
     for (auto i { 0 } ; i < MAX_THREADS; i++) {
         pthread_join(p_threads[i], NULL); // Wait for all threads to terminate
     }
-    sum += thread_sum;
-    std::cout << sum << std::endl;
+    for(auto i = 0; i < MAX_THREADS; i++){
+        std::cout << thread_sum[i] << " ";
+    }
     sum /= nump;
 
     unsigned psum {};
