@@ -306,7 +306,9 @@ Matrix threshold_par(Matrix &m, const int MAX_THREADS)
     }
     for(auto i = 0; i < MAX_THREADS; i++){
         std::cout << thread_sum[i] << " ";
+        sum+= thread_sum[i];
     }
+    std::cout << "\n\nsum: "<< sum << "\n\n";
     sum /= nump;
 
     unsigned psum {};
