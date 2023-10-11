@@ -247,7 +247,7 @@ Matrix blur_par(Matrix &dst, const int radius, const int MAX_THREADS)
 struct thread_data{
         int thread_id;
         int sum;
-}
+};
 
 void *threadFunc(void * thread_arg){
     struct thread_data *my_data;
