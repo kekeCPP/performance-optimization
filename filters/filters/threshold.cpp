@@ -10,7 +10,7 @@ Author: David Holmqvist <daae19@student.bth.se>
 
 int main(int argc, char const* argv[])
 {
-    if (argc != 4) {
+    if (argc != 3) {
         std::cerr << "Usage: " << argv[0] << " [infile] [outfile] [num_threads]" << std::endl;
         std::exit(1);
     }
@@ -19,7 +19,7 @@ int main(int argc, char const* argv[])
     PPM::Writer writer {};
 
     auto m { reader(argv[1]) };
-    Filter::threshold(m, std::stoul(argv[3]));
+    Filter::threshold(m, std::stoul(15));
 
     writer(m, argv[2]);
 
