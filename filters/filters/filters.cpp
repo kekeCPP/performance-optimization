@@ -263,7 +263,7 @@ void *threadFunc(void * thread_arg){
         sum += my_data->dstR[i] + my_data->dstG[i] + my_data->dstG[i];
     }
     //std::cout << *my_data->sum << " ";
-    std::cout << "realsum: " << sum << " ";
+    std::cout << sum << " ";
 
     pthread_exit(NULL);
 }
