@@ -166,3 +166,16 @@ unsigned char& Matrix::b(unsigned x, unsigned y)
 {
     return B[y * x_size + x];
 }
+
+unsigned char* Matrix::get_R_nonconst()
+{
+    return R;
+}
+unsigned char* Matrix::get_G_nonconst()
+{
+    return G;
+}
+unsigned char* Matrix::get_B_nonconst()
+{
+    return B;
+}
