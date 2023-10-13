@@ -3,12 +3,58 @@ Author: David Holmqvist <daae19@student.bth.se>
 */
 
 #include "ppm.hpp"
+#include <pthread.h>
 #include <fstream>
 #include <iostream>
 #include <regex>
 #include <stdexcept>
 
 namespace PPM {
+
+// void *fill_thread(void* thread_args) {
+//     thread_data* my_data;
+//     my_data = (thread_data*) thread_args;
+
+//     std::ifstream f {};
+
+//     f.open(my_data->filename);
+
+//     if (!f) {
+//         my_data->stream.setstate(std::ios::failbit);
+//         pthread_exit(NULL);
+//     }
+
+//     my_data->stream << f.rdbuf();
+
+//     f.seekg(0, std::istream::end);
+//     std::streamoff len = f.tellg(); // get length of file
+//     f.seekg(0);
+//     len /= 4; // get number of characters to read
+
+//     // my_data->res.clear();
+
+
+//     // int read_start_index = len * my_data->thread_id;        // set the start index for the thread
+//     // f.read(my_data->result + read_start_index, len);        // read len bytes into result
+//     // std::cout << my_data->result << "\n";
+
+//     f.close();
+
+//     pthread_exit(NULL);
+// }
+
+int Reader::get_file_size(std::string filename)
+{
+    std::ifstream f;
+    f.open(filename);
+
+    if (!f) { return -1; }
+
+    f.seekg(0, std::istream::end);
+    std::streamoff len = f.tellg();
+    f.seekg(0);
+    return len;
+}
 
 void Reader::fill(std::string filename)
 {
@@ -23,19 +69,19 @@ void Reader::fill(std::string filename)
 
     stream << f.rdbuf();
 
-    f.seekg(0, std::istream::end);
-    std::streamoff len = f.tellg(); // get length of file
-    f.seekg(0);
+    // f.seekg(0, std::istream::end);
+    // std::streamoff len = f.tellg(); // get length of file
+    // f.seekg(0);
 
 
-    std::string line;
-    res.clear();
-    if (len > 0) {
-        res.reserve(static_cast<std::string::size_type>(len));
-    }
-    while (getline(f, line)) {
-        (res += line) += "\n";
-    }
+    // std::string line;
+    // res.clear();
+    // if (len > 0) {
+    //     res.reserve(static_cast<std::string::size_type>(len));
+    // }
+    // while (getline(f, line)) {
+    //     (res += line) += "\n";
+    // }
 
     f.close();
 }
@@ -91,7 +137,23 @@ std::tuple<unsigned char*, unsigned char*, unsigned char*> Reader::get_data(unsi
     auto size { x_size * y_size };
     auto R { new char[size] }, G { new char[size] }, B { new char[size] };
 
-    unsigned int j = stream.tellg(); // variable to keep reading the next element, starts at current position in stream
+
+    int original_pos = stream.tellg();
+    stream.seekg(0, std::istream::end);
+    std::streamoff len = stream.tellg(); // get length of stream
+    stream.seekg(0);
+
+
+    std::string line;
+    res.clear();
+    if (len > 0) {
+        res.reserve(static_cast<std::string::size_type>(len));
+    }
+    while (getline(stream, line)) {
+        (res += line) += "\n";
+    }
+
+    unsigned int j = original_pos;
 
     for (auto i { 0 }, read { 0 }; i < size; i++) {
 
@@ -108,6 +170,104 @@ std::tuple<unsigned char*, unsigned char*, unsigned char*> Reader::get_data(unsi
             return { nullptr, nullptr, nullptr };
         }
     }
+
+    return { reinterpret_cast<unsigned char*>(R), reinterpret_cast<unsigned char*>(G), reinterpret_cast<unsigned char*>(B) };
+}
+
+
+struct thread_data {
+    std::string filename;
+    char* R;
+    char* G; 
+    char* B;
+    unsigned int size;
+    unsigned int start_pos;
+    unsigned int stream_length;
+    unsigned int thread_id;
+};
+
+void* read_rgb_par(void* thread_args)
+{
+    thread_data* my_data;
+    my_data = (thread_data*) thread_args;
+    std::string line;
+    std::string res;
+
+    std::ifstream f;
+    f.open(my_data->filename);
+
+    res.clear();
+    if (my_data->stream_length > 0) {
+        res.reserve(static_cast<std::string::size_type>(my_data->stream_length));
+    }
+
+    unsigned int start_index = my_data->start_pos + ((my_data->stream_length - (my_data->start_pos / 4)) * my_data->thread_id); // calculate start index
+    unsigned int end_index = start_index + my_data->stream_length;                                 // calculate end index
+
+
+    f.seekg(start_index);                      // set the buffer to the position we want to start reading from
+    while (getline(f, line)) {
+        if (f.tellg() == end_index) { break; } // read until we reach end_index
+        (res += line) += "\n";
+    }
+    f.close();
+
+    unsigned int j = 0; // to start reading from pos 0 in res
+
+    for (auto i { my_data->size * my_data->thread_id }; i < (my_data->size * (1 + my_data->thread_id)); i++) {  // for-loop from start index
+                                                                                                   // to end index for each thread
+        my_data->R[i] = res[j];
+        my_data->G[i] = res[j + 1];
+        my_data->B[i] = res[j + 2];
+        j += 3;
+        
+
+        if (&(my_data->R[i]) == nullptr || &(my_data->G[i]) == nullptr || &(my_data->B[i]) == nullptr) {
+            delete[] my_data->R;
+            delete[] my_data->G;
+            delete[] my_data->B;
+            // return { nullptr, nullptr, nullptr };
+        }
+    }
+    pthread_exit(NULL);
+}
+
+std::tuple<unsigned char*, unsigned char*, unsigned char*> Reader::get_data_par(unsigned x_size, unsigned y_size, std::string filename)
+{
+    auto size { x_size * y_size };
+    auto R { new char[size] }, G { new char[size] }, B { new char[size] };
+
+
+    int original_pos = stream.tellg();
+    stream.seekg(0, std::istream::end);
+    std::streamoff len = stream.tellg(); // get length of stream
+    stream.seekg(0);
+
+    const unsigned int MAX_THREADS = 4;
+    thread_data thread_data_array[MAX_THREADS];
+    pthread_t p_threads[MAX_THREADS];
+
+
+    for (int i = 0; i < MAX_THREADS; i++){
+            thread_data_array[i].thread_id = i;
+            thread_data_array[i].R = R;
+            thread_data_array[i].G = G;
+            thread_data_array[i].B = B;
+            thread_data_array[i].size = size / MAX_THREADS;
+            thread_data_array[i].start_pos = original_pos;
+            thread_data_array[i].stream_length = len / MAX_THREADS;
+            thread_data_array[i].filename = filename;
+
+            pthread_create(&p_threads[i], NULL, read_rgb_par, (void*) &thread_data_array[i]);
+        }
+
+        for (int i = 0; i < MAX_THREADS; i++) {
+            pthread_join(p_threads[i], NULL);
+        }
+
+    //////////////////////////////////////////////
+
+    //////////////////////////////////////////////
 
     return { reinterpret_cast<unsigned char*>(R), reinterpret_cast<unsigned char*>(G), reinterpret_cast<unsigned char*>(B) };
 }
@@ -145,7 +305,7 @@ Matrix Reader::operator()(std::string filename)
             throw std::runtime_error { "couldn't read color max" };
         }
 
-        auto [R, G, B] { get_data(x_size, y_size) };
+        auto [R, G, B] { get_data_par(x_size, y_size, filename) };
 
         if (!R || !G || !B) {
             throw std::runtime_error { "couldn't read image data" };

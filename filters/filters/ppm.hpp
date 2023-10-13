@@ -22,12 +22,15 @@ class Reader {
 private:
     std::stringstream stream;
     std::string res;
+    // char* res;
 
     std::string get_magic_number();
     std::pair<unsigned, unsigned> get_dimensions();
     std::tuple<unsigned char*, unsigned char*, unsigned char*> get_data(unsigned x_size, unsigned y_size);
+    std::tuple<unsigned char*, unsigned char*, unsigned char*> get_data_par(unsigned x_size, unsigned y_size, std::string filename);
     unsigned get_color_max();
     void fill(std::string filename);
+    int get_file_size(std::string filename);
 
 public:
     Matrix operator()(std::string filename);
