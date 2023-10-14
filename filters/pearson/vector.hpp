@@ -11,6 +11,7 @@ private:
     double* data;
 
 public:
+
     Vector();
     Vector(unsigned size);
     Vector(unsigned size, double* data);

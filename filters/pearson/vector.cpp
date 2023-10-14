@@ -5,6 +5,10 @@ Author: David Holmqvist <daae19@student.bth.se>
 #include "vector.hpp"
 #include <iostream>
 #include <cmath>
+#include <pthread.h>
+#include <algorithm>
+
+#define MAX_THREADS 4
 
 Vector::Vector()
     : size { 0 }
@@ -33,13 +37,21 @@ Vector::Vector(unsigned size, double* data)
 {
 }
 
+///////////// HOTSPOT ///////////////
 Vector::Vector(const Vector& other)
     : Vector { other.size }
 {
-    for (auto i { 0 }; i < size; i++) {
-        data[i] = other.data[i];
-    }
+    // NEW CODE
+
+    std::copy_n(data, size, other.data);
+
+    // OLD CODE
+
+    // for (auto i { 0 }; i < size; i++) {
+    //     data[i] = other.data[i];
+    // }
 }
+////////////////////////////////////
 
 unsigned Vector::get_size() const
 {
