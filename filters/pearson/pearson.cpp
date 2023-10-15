@@ -16,6 +16,7 @@ int main(int argc, char const* argv[])
 
     auto datasets { Dataset::read(argv[1]) };
     auto corrs { Analysis::correlation_coefficients(datasets) };
+    
     Dataset::write(corrs, argv[2]);
 
     return 0;

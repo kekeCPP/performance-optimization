@@ -43,13 +43,13 @@ Vector::Vector(const Vector& other)
 {
     // NEW CODE
 
-    std::copy_n(data, size, other.data);
+    std::copy_n(other.data, size, data);
 
     // OLD CODE
 
-    // for (auto i { 0 }; i < size; i++) {
-    //     data[i] = other.data[i];
-    // }
+//     for (auto i { 0 }; i < size; i++) {
+//         data[i] = other.data[i];
+//     }
 }
 ////////////////////////////////////
 
